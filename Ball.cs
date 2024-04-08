@@ -3,20 +3,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media.Animation;
 using System.Windows.Media;
+using System.Windows.Shapes;
+using System.Windows;
 //using static TheArkanoidGame1.DiagonalMoving;
 
 namespace TheArkanoidGame1
 {
     internal class Ball : Figure, IDiagonalMoving
     {
-        private int radius = 16;
-        private int speed;
+        public int radius = 16;
+        public int speed;
         private Random random;
         protected DiagonalMovingDirection diagonalMovingDirection;
         protected Platform platform;
         private int topWallY = 12;
-        private int bottomWallY = 12 + 487;
+        private int bottomWallY  = 12 + 487;
         private int leftWallX = 12;
         private int rightWallX = 12 + 980;
 
@@ -28,13 +31,20 @@ namespace TheArkanoidGame1
             MovingDownLeft,
             MovingDownRight
         }
+        /*protected override Geometry DefiningGeometry { get 
+            {
+                return this.RenderedGeometry;
+            }
+        }*/
 
         public Ball(int x, int y, Brush brush, Color color) : base(x, y, brush, color)
         {
-            this.speed = 1;
+            this.speed = 5;
             this.random = new Random();
             //SetPosition(x, y);
         }
+
+        
 
         public void Draw()
         {

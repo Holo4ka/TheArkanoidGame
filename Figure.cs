@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
+using System.Windows.Shapes;
+using System.Windows;
 
 namespace TheArkanoidGame1
 {
@@ -13,7 +16,6 @@ namespace TheArkanoidGame1
         public Color color;
         public Brush brush;
         //public Graphics gr;
-
 
         public Figure(int x, int y, Brush brush, Color color)
         {

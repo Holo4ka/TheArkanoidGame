@@ -13,6 +13,11 @@ namespace TheArkanoidGame1
         public int height { get; set; }
         public Color color { get; set; }
 
+        /*protected override Geometry DefiningGeometry
+        {
+            get { return this.RenderedGeometry; }
+        }*/
+
         public Platform(int x, int y, Brush brush, Color color, int width, int height) : base(x, y, brush, color)
         {
             this.width = width;
