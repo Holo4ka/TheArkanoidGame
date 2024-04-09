@@ -15,6 +15,8 @@ using System.Windows.Shapes;
 using System.Windows.Media.Animation;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Threading;
+//using System.Drawing;
+using System.Windows.Threading;
 //using System.Timers;
 
 namespace TheArkanoidGame1
@@ -24,43 +26,56 @@ namespace TheArkanoidGame1
     /// </summary>
     public partial class MainWindow : Window
     {
+        private Point ballVelocity = new Point(5, 5); // Скорость шарика
+        private double ballRadius = 50;
+        private double bounceSpeed = 1;
+
         public MainWindow()
         {
             InitializeComponent();
 
-            //ball = new Ball(20, 20, new SolidColorBrush(Color.FromArgb(255, 255, 0, 0)), Color.FromRgb(255, 0, 0));
-
-            TranslateTransform translateX = new TranslateTransform();
-            TranslateTransform translateY = new TranslateTransform();
-            ball.RenderTransform = new TransformGroup { Children = { translateX, translateY } };
-
-            // Анимация движения вниз и вправо
-            DoubleAnimation animationX = new DoubleAnimation
-            {
-                From = 51,
-                To = 800 - ball.Width,
-                Duration = TimeSpan.FromSeconds(3),
-                AutoReverse = true,
-                RepeatBehavior = RepeatBehavior.Forever
-            };
-            translateX.BeginAnimation(TranslateTransform.XProperty, animationX);
-
-            DoubleAnimation animationY = new DoubleAnimation
-            {
-                From = 51,
-                To = 480 - ball.Height,
-                Duration = TimeSpan.FromSeconds(3),
-                AutoReverse = true,
-                RepeatBehavior = RepeatBehavior.Forever
-            };
-            translateY.BeginAnimation(TranslateTransform.YProperty, animationY);
+            // Запускаем таймер для перемещения шарика
+            DispatcherTimer timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromMilliseconds(10);
+            timer.Tick += Timer_Tick;
+            timer.Start();
         }
 
-        /*private void button1_Click(object sender, RoutedEventArgs e)
+        private void Timer_Tick(object sender, EventArgs e)
         {
-            ball.RenderTransform.BeginAnimation(TranslateTransform.XProperty, null);
-            ball.RenderTransform.BeginAnimation(TranslateTransform.YProperty, null);
-        }*/
+            Canvas.SetLeft(ball, Canvas.GetLeft(ball) + ballVelocity.X);
+            Canvas.SetTop(ball, Canvas.GetTop(ball) + ballVelocity.Y);
 
+            // Проверка столкновения со стенами окна
+            if (Canvas.GetLeft(ball) < 0 || Canvas.GetLeft(ball) > canvas.ActualWidth - 2 * ballRadius)
+            {
+                ballVelocity.X *= -1;
+            }
+
+            if (Canvas.GetTop(ball) < 0 || Canvas.GetTop(ball) > canvas.ActualHeight - 2 * ballRadius)
+            {
+                ballVelocity.Y *= -1;
+            }
+
+            // Проверка столкновения с прямоугольником
+            if (Canvas.GetLeft(ball) + 2 * ballRadius > Canvas.GetLeft(rectangle) &&
+            Canvas.GetLeft(ball) < Canvas.GetLeft(rectangle) + rectangle.Width &&
+                Canvas.GetTop(ball) + 2 * ballRadius > Canvas.GetTop(rectangle) &&
+                Canvas.GetTop(ball) < Canvas.GetTop(rectangle) + rectangle.Height)
+            {
+                // Обработка отскока
+                if (Canvas.GetLeft(ball) + ballRadius < Canvas.GetLeft(rectangle) ||
+                    Canvas.GetLeft(ball) + ballRadius > Canvas.GetLeft(rectangle) + rectangle.Width)
+                {
+                    ballVelocity.X *= -1;
+                }
+
+                if (Canvas.GetTop(ball) + ballRadius < Canvas.GetTop(rectangle) ||
+                    Canvas.GetTop(ball) + ballRadius > Canvas.GetTop(rectangle) + rectangle.Height)
+                {
+                    ballVelocity.Y *= -1;
+                }
+            }
+        }
     }
 }
