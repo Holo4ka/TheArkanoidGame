@@ -1,4 +1,4 @@
-﻿namespace TheArkanoidGame
+﻿namespace ArkanoidGame
 {
     partial class Form1
     {
@@ -29,52 +29,31 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            pictureBox1 = new PictureBox();
-            timer1 = new System.Windows.Forms.Timer(components);
-            button1 = new Button();
-            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
+            GameIterationTimer = new System.Windows.Forms.Timer(components);
             SuspendLayout();
             // 
-            // pictureBox1
+            // GameIterationTimer
             // 
-            pictureBox1.Location = new Point(12, 12);
-            pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(980, 487);
-            pictureBox1.TabIndex = 0;
-            pictureBox1.TabStop = false;
-            pictureBox1.Paint += pictureBox1_Paint;
-            // 
-            // timer1
-            // 
-            timer1.Tick += timer1_Tick;
-            // 
-            // button1
-            // 
-            button1.Location = new Point(412, 208);
-            button1.Name = "button1";
-            button1.Size = new Size(183, 57);
-            button1.TabIndex = 1;
-            button1.Text = "Начать";
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += button1_Click;
+            GameIterationTimer.Interval = 10;
+            GameIterationTimer.Tick += GameIterationTimer_Tick;
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1004, 511);
-            Controls.Add(button1);
-            Controls.Add(pictureBox1);
+            ClientSize = new Size(800, 450);
             Name = "Form1";
             Text = "Form1";
-            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
+            Load += FrmArkanoidMain_Load;
+            Paint += FrmArkanoidMain_Paint;
+            KeyDown += FrmArkanoidMain_KeyDown;
+            MouseClick += FrmArkanoidMain_MouseClick;
+            MouseMove += FrmArkanoidMain_MouseMove;
             ResumeLayout(false);
         }
 
         #endregion
 
-        private PictureBox pictureBox1;
-        private System.Windows.Forms.Timer timer1;
-        private Button button1;
+        private System.Windows.Forms.Timer GameIterationTimer;
     }
 }

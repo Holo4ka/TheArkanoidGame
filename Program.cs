@@ -1,4 +1,4 @@
-namespace TheArkanoidGame
+namespace ArkanoidGame
 {
     internal static class Program
     {

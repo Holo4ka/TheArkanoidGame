@@ -4,14 +4,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TheArkanoidGame
+namespace ArkanoidGame
 {
-    internal interface IMovingDirection
+    public interface IMovingDirection
     {
-        bool IsNotMoving(); // Проверка на движение
+        bool IsMovingUpRight();
+        bool IsMovingUpLeft();
+        bool IsMovingDownRight();
+        bool IsMovingDownLeft();
+        bool IsNotMoving();
 
-        //void InitRandomDirection(); // Инициация движения в произвольном направлении
-
-        void InitRandomSafeDirection(); // Инициация движения в произвольном направлении, кроме движения вниз
+        void InitRandomDirection();
+        void InitRandomSafeDirection();
+        void ChangeDirectionToUpLeft();
+        void ChangeDirectionToUpRight();
+        void ChangeDirectionToDownLeft();
+        void ChangeDirectionToDownRight();
     }
 }

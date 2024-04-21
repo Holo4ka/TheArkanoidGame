@@ -1,46 +1,126 @@
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Drawing.Drawing2D;
-
-namespace TheArkanoidGame
+namespace ArkanoidGame
 {
     public partial class Form1 : Form
     {
-        Graphics gr;
-        Ball ball;
-        Pen pen = new Pen(Color.Black, 2);
-        SolidBrush brush = new SolidBrush(Color.Red);
+        private GameEngine gameEngine;
+        private Render gameObjectsRenderer;
+
         public Form1()
         {
             InitializeComponent();
+        }
+
+        private void FrmArkanoidMain_Load(object sender, EventArgs e)
+        {
             DoubleBuffered = true;
-            gr = pictureBox1.CreateGraphics();
-            ball = new Ball(pictureBox1.Width / 2 - 5, 400, new SolidBrush(Color.Red), Color.Red, gr);
-            timer1.Interval = 10;
-            //timer1.Tick += Timer_Tick;
-            timer1.Start();
+            gameEngine = new GameEngine(GameIterationTimer, Width, Height);
+            gameObjectsRenderer = new Render(gameEngine);
+            gameEngine.StartGame();
+            Invalidate();
         }
 
-        private void timer1_Tick(object sender, EventArgs e)
+        private void FrmArkanoidMain_Paint(object sender, PaintEventArgs e)
         {
-            
-            pictureBox1.Invalidate();
+            gameObjectsRenderer.RenderGameObjects(e.Graphics);
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void FrmArkanoidMain_MouseMove(object sender, MouseEventArgs e)
         {
-            button1.Hide();
-            ball.Draw();
-            ball.InitRandomSafeDiagonalMoving();
+            gameEngine.HandleMouseMove(e.Location);
         }
 
-        private void pictureBox1_Paint(object sender, PaintEventArgs e)
+        private void FrmArkanoidMain_KeyDown(object sender, KeyEventArgs e)
         {
-            ball.MoveAtCurrentDirection();
+            if (e.KeyCode == Keys.Space)
+            {
+                // пробел - поставить/снять игру на паузу. когда игра ставится на паузу, 
+                // нужно выполнить дополнительное действие - вызвать метод Invalidate() формы для
+                // принудительной перерисовки всех игровых объектов, поскольку таймер в момент паузы останавливается
+                // и gameObjectsRenderer не успеет отрисовать сам текст о том, что игра стоит на паузе
+                gameEngine.ToggleGamePauseMode(() => Invalidate());
+            }
+            else if (e.KeyCode == Keys.Escape)
+            {
+                // клавиша Escape - это выход из игры. прежде чем выйти из игры, мы поставим игру на паузу:
+                gameEngine.PauseGame(() => Invalidate());
+
+                // а затем покажем диалоговое окно пользователю. Если он выберет выход из игры - выходим, иначе снимаем игру с паузы и продолжаем
+                DialogResult dlgResult = MessageBox.Show("Точно выйти из игры?", "Выход", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+                if (dlgResult == DialogResult.Yes)
+                {
+                    Application.Exit();
+                }
+                else
+                {
+                    gameEngine.UnpauseGame();
+                }
+            }
+            else if (e.KeyCode == Keys.Enter)
+            {
+                // нажатие на Enter - перезапуск игры
+                gameEngine.RestartGame();
+            }
+            else if (e.KeyCode == Keys.S)
+            {
+                gameEngine.IsShowStats = !gameEngine.IsShowStats;
+            }
+        }
+
+        private void FrmArkanoidMain_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                // нажатие на правую кнопку также включает/выключает режим паузы в игре, как
+                // и клавиша пробела
+                gameEngine.ToggleGamePauseMode(() => Invalidate());
+            }
+            else if (e.Button == MouseButtons.Middle)
+            {
+                gameEngine.IsShowStats = !gameEngine.IsShowStats;
+            }
+        }
+
+        private void GameIterationTimer_Tick(object sender, EventArgs e)
+        {
+            Func<bool> funcIsNeedToContinueWhenGameIsOver = () =>
+            {
+                DialogResult dlgResult = MessageBox.Show(
+                    "Вы проиграли... Начать заново?\r\nВы можете отказаться сейчас и начать игру позже, нажав Enter",
+                    "Проигрыш :(",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Warning
+                );
+
+                if (dlgResult == DialogResult.Yes)
+                {
+                    return true;
+                }
+                return false;
+            };
+
+            Func<int, bool> funcIsNeedToRepeatAfterWin = (currentGameLevel) =>
+            {
+                DialogResult dlgResult = MessageBox.Show(
+                    "Поздравляем, вы победили, дойдя до последнего уровня " + currentGameLevel + "!\r\nСыграем ещё раз?\r\n",
+                    "Победа!",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question
+                );
+
+                if (dlgResult == DialogResult.Yes)
+                {
+                    return true;
+                }
+                return false;
+            };
+
+            gameEngine.HandleGameCycle(
+                () => Invalidate(),
+                funcIsNeedToContinueWhenGameIsOver,
+                funcIsNeedToRepeatAfterWin
+            );
+
+            Invalidate();
         }
     }
 }
