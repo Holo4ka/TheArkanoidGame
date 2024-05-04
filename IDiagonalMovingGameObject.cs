@@ -13,7 +13,6 @@ namespace ArkanoidGame
         void MoveUpLeft();
         void MoveDownLeft();
         void MoveDownRight();
-        void InitRandomDiagonalMovingDirection();
         void InitRandomSafeDiagonalMovingDirection();
     }
 }

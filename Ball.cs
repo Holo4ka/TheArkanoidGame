@@ -132,17 +132,6 @@ namespace ArkanoidGame
         }
 
         /// <summary>
-        /// Инициализировать произвольное направление движения по какой-то из диагоналей и установить его 
-        /// в качестве текущего направления движения шарика
-        /// </summary>
-        public void InitRandomDiagonalMovingDirection()
-        {
-            IMovingDirection direction = new SimpleDiagonalMoving();
-            direction.InitRandomDirection();
-            SetMovingDirection(direction);
-        }
-
-        /// <summary>
         /// Инициализировать произвольное и безопасное для игрока направление движения по какой-то 
         /// из диагоналей и установить его в качестве текущего направления движения шарика
         /// </summary>
@@ -572,7 +561,7 @@ namespace ArkanoidGame
         /// </summary>
         public void InitRandomMovingDirection()
         {
-            InitRandomDiagonalMovingDirection();
+            
         }
 
         /// <summary>

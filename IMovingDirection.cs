@@ -14,7 +14,6 @@ namespace ArkanoidGame
         bool IsMovingDownLeft();
         bool IsNotMoving();
 
-        void InitRandomDirection();
         void InitRandomSafeDirection();
         void ChangeDirectionToUpLeft();
         void ChangeDirectionToUpRight();

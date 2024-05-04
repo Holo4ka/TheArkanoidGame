@@ -8,7 +8,7 @@ namespace ArkanoidGame
 {
     public abstract class GameObject
     {
-        protected GameObjectPosition position;
+        public Point position;
 
         public delegate void MultipleGameObjectsInteractionDelegate(object sender, ICollection<GameObject> otherObjects);
 
@@ -31,7 +31,7 @@ namespace ArkanoidGame
 
         public string Title { get; set; }
 
-        public GameObjectPosition Position
+        public Point Position
         {
             get
             {
@@ -41,13 +41,13 @@ namespace ArkanoidGame
 
         protected GameObject(string title)
         {
-            position = new GameObjectPosition();
+            position = new Point();
             Title = title;
         }
 
         protected GameObject(string title, int width, int height)
         {
-            position = new GameObjectPosition();
+            position = new Point();
             Title = title;
         }
 

@@ -22,7 +22,7 @@ namespace ArkanoidGame
         /// <param name="g"></param>
         private void RenderGameStats(Graphics g)
         {
-            if (gameEngine.IsShowStats)
+            if (gameEngine.ShowStats)
             {
                 GameStats gameStats = gameEngine.GameStatistics;
                 Font statsFont = new Font("Ubuntu Mono", 12);
@@ -103,7 +103,7 @@ namespace ArkanoidGame
         /// <param name="g"></param>
         private void RenderGamePausedMessage(Graphics g)
         {
-            if (gameEngine.IsGamePaused)
+            if (gameEngine.Paused)
             {
                 Font pausedFont = new Font("Arial", 16);
                 string pausedMessage = "     Игра на паузе...\r\n[Space] - Продолжить\r\n[Esc] - Выход из игры";

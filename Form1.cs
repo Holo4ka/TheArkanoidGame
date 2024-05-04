@@ -62,7 +62,7 @@ namespace ArkanoidGame
             }
             else if (e.KeyCode == Keys.S)
             {
-                gameEngine.IsShowStats = !gameEngine.IsShowStats;
+                gameEngine.ShowStats = !gameEngine.ShowStats;
             }
         }
 
@@ -76,7 +76,7 @@ namespace ArkanoidGame
             }
             else if (e.Button == MouseButtons.Middle)
             {
-                gameEngine.IsShowStats = !gameEngine.IsShowStats;
+                gameEngine.ShowStats = !gameEngine.ShowStats;
             }
         }
 
