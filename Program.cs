@@ -11,7 +11,11 @@ namespace ArkanoidGame
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
-            Application.Run(new Form1());
+            GameEngine eng = new GameEngine(800, 500);
+            StartForm f = new StartForm(eng);
+            f.Show();
+            Application.Run();
+
         }
     }
 }

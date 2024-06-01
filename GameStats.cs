@@ -116,13 +116,13 @@ namespace ArkanoidGame
         {
             if (counterKey == null)
             {
-                return -1;
+                return 0;
             }
             if (counters.ContainsKey(counterKey))
             {
                 return counters[counterKey];
             }
-            return -1;
+            return 0;
         }
 
         /// <summary>

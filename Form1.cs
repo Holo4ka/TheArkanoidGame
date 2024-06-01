@@ -1,3 +1,5 @@
+using System.CodeDom;
+
 namespace ArkanoidGame
 {
     public partial class Form1 : Form
@@ -5,15 +7,20 @@ namespace ArkanoidGame
         private GameEngine gameEngine;
         private Render gameObjectsRenderer;
 
-        public Form1()
+        public Form1(GameStats stats)
         {
+            StartPosition = FormStartPosition.CenterScreen;
+            gameEngine = new GameEngine(GameIterationTimer, 800, 500);
+            gameEngine.setStats(stats);
+            /*StartForm sf = new StartForm(gameEngine);
+            sf.ShowDialog();*/
             InitializeComponent();
         }
 
         private void FrmArkanoidMain_Load(object sender, EventArgs e)
         {
             DoubleBuffered = true;
-            gameEngine = new GameEngine(GameIterationTimer, Width, Height);
+            if (gameEngine.timer == null) { gameEngine.setTimer(GameIterationTimer); }
             gameObjectsRenderer = new Render(gameEngine);
             gameEngine.StartGame();
             Invalidate();
@@ -45,7 +52,20 @@ namespace ArkanoidGame
                 gameEngine.PauseGame(() => Invalidate());
 
                 // а затем покажем диалоговое окно пользователю. ≈сли он выберет выход из игры - выходим, иначе снимаем игру с паузы и продолжаем
-                DialogResult dlgResult = MessageBox.Show("“очно выйти из игры?", "¬ыход", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+                using (CloseGameForm cgf = new CloseGameForm()) 
+                {
+                    cgf.ShowDialog();
+                    string res = cgf.pressed;
+                    if (res == "Button 1") { gameEngine.UnpauseGame(); }
+                    else if (res == "Button 2") 
+                    {
+                        this.Close();
+
+                        StartForm sf = new StartForm(gameEngine);
+                        sf.ShowDialog();
+                    }
+                }
+                /*DialogResult dlgResult = MessageBox.Show("“очно выйти из игры?", "¬ыход", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
                 if (dlgResult == DialogResult.Yes)
                 {
                     Application.Exit();
@@ -53,7 +73,7 @@ namespace ArkanoidGame
                 else
                 {
                     gameEngine.UnpauseGame();
-                }
+                }*/
             }
             else if (e.KeyCode == Keys.Enter)
             {
@@ -74,10 +94,10 @@ namespace ArkanoidGame
                 // и клавиша пробела
                 gameEngine.ToggleGamePauseMode(() => Invalidate());
             }
-            else if (e.Button == MouseButtons.Middle)
+            /*else if (e.Button == MouseButtons.Middle)
             {
                 gameEngine.IsShowStats = !gameEngine.IsShowStats;
-            }
+            }*/
         }
 
         private void GameIterationTimer_Tick(object sender, EventArgs e)

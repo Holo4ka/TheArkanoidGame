@@ -44,7 +44,7 @@ namespace ArkanoidGame
 
         private readonly GameObject platform = new Platform("Платформа игрока", platformWidth, platformHeight);
         private readonly GameObject ball = new Ball("Шарик", ballRadius);
-        private readonly GameStats gameStats = new GameStats();
+        public GameStats gameStats = new GameStats();
         private readonly List<StaticBlock> blocks = new List<StaticBlock>();
 
         public static readonly string GAME_STATS_PUSHED_AWAY_BALLS_TOTAL = "Отбитых шариков за все игры";
@@ -85,10 +85,10 @@ namespace ArkanoidGame
         /// Включить/выключить отображение можно нажатием клавиши S во время игры.
         /// По умолчанию не выводим статистику. Если нужно выводить, то поменять на true.
         /// </summary>
-        public bool IsShowStats { get; set; } = true;
+        public bool IsShowStats { get; set; } = false;
 
 
-        private System.Windows.Forms.Timer timer;
+        public System.Windows.Forms.Timer timer;
 
         public GameObject PlayerPlatform
         {
@@ -119,6 +119,22 @@ namespace ArkanoidGame
             timer = gameTimer;
             GameFieldWidth = gameFieldWidth;
             GameFieldHeight = gameFieldHeight;
+        }
+
+        public GameEngine(int gameFieldWidth, int gameFieldHeight) 
+        {
+            GameFieldWidth = gameFieldWidth;
+            GameFieldHeight = gameFieldHeight;
+        }
+
+        public void setStats(GameStats stats) 
+        {
+            this.gameStats = stats;
+        }
+
+        public void setTimer(System.Windows.Forms.Timer gameTimer) 
+        {
+            timer = gameTimer;
         }
 
         public void StartGame()

@@ -105,18 +105,7 @@ namespace ArkanoidGame
         {
             if (gameEngine.IsGamePaused)
             {
-                Font pausedFont = new Font("Arial", 16);
-                string pausedMessage = "     Игра на паузе...\r\n[Space] - Продолжить\r\n[Esc] - Выход из игры";
-                SizeF pausedMessageSize = g.MeasureString(pausedMessage, pausedFont);
-
-                g.DrawString(pausedMessage, pausedFont, Brushes.Yellow,
-                    new PointF(
-                        gameEngine.GameFieldWidth / 2 - pausedMessageSize.Width / 2,
-                        gameEngine.GameFieldHeight / 2 - pausedMessageSize.Height / 2 + 100
-                    )
-                );
-
-                pausedFont.Dispose();
+                
             }
         }
 
